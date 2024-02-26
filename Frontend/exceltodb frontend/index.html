@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #formsContainer {
+            display: flex;
+            gap: 20px;
+        }
+
+        #createUserSection,
+        #loginSection {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: white;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 8px;
+        }
+
+        input {
+            padding: 8px;
+            margin-bottom: 16px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Register & Login </h1>
+
+    <div id="formsContainer">
+        <div id="createUserSection">
+            <h2>Create User</h2>
+            <form id="createUserForm">
+                <label for="createEmail">Email:</label>
+                <input type="email" id="createEmail" required>
+                <label for="createPassword">Password:</label>
+                <input type="password" id="createPassword" required>
+                <button type="button" onclick="createUser()">Create User</button>
+            </form>
+        </div>
+
+        <div id="loginSection">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <label for="loginEmail">Email:</label>
+                <input type="email" id="loginEmail" required>
+                <label for="loginPassword">Password:</label>
+                <input type="password" id="loginPassword" required>
+                <button type="button" onclick="loginUser()">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    function createUser() {
+        var email = document.getElementById('createEmail').value;
+        var password = document.getElementById('createPassword').value;
+
+        console.log(email+" : "+password)
+
+        // Make a POST request to your create user API endpoint
+        fetch('http://localhost:8080/auth/createUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('User creation failed');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('User created successfully:', data);
+                alert('User created successfully!');
+                window.location.reload()
+            })
+            .catch(error => {
+                console.error('Error creating user:', error);
+                alert('Error creating user. Please try again.');
+            });
+
+          
+            
+    }
+
+    function loginUser() {
+        var email = document.getElementById('loginEmail').value;
+        var password = document.getElementById('loginPassword').value+'';
+
+        console.log(email+" : "+password)
+
+        // Make a POST request to your login API endpoint
+        fetch('http://localhost:8080/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Login failed');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Login successful:', data);
+                alert('Login successful! Redirecting to display page.');
+                // Redirect to the display page
+                window.location.href = 'display.html';
+            })
+            .catch(error => {
+                console.error(' Login failed:', error);
+                alert('Login failed. Please check your credentials and try again.');
+            });
+    }
+</script>
+</body>
+
+</html>
