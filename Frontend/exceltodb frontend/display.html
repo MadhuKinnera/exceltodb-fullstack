@@ -110,11 +110,10 @@
     </div>
     <script>
        
-        let headers = null;
+    let headers = null;
     
      var currentPage = 1;
 
-// Fetch data for a specific page
 function fetchData(page) {
 
     page = page -1;
@@ -143,7 +142,6 @@ function displayPagination(totalPages) {
                 pageLink.className = 'page-link';
                 pageLink.innerText = i;
 
-                // Add click event to fetch data for the clicked page
                 pageLink.addEventListener('click', function (event) {
                     event.preventDefault();
                     currentPage = parseInt(event.target.innerText);
@@ -154,17 +152,15 @@ function displayPagination(totalPages) {
             }
         }
 
-        // Initial data fetch for the first page
         fetchData(currentPage);
 
 
 
-        // Display Excel data in the table
         function displayExcelData(data) {
             var excelDataTable = document.getElementById('excelDataTable');
             excelDataTable.innerHTML = ''; // Clear existing table content
 
-            // Add table headers
+           
             headers = Object.keys(data[0]);
             console.log(headers);
             var headerRow = '<tr>';
@@ -182,7 +178,7 @@ function displayPagination(totalPages) {
                     dataRow += '<td>' + row[header] + '</td>';
                 });
 
-                // Add edit and delete buttons
+           
                 dataRow += '<td class="action-buttons">' +
                     '<span class="edit-button" onclick="editRow(' + row.id + ')">Edit</span>' +
                     '<span class="delete-button" onclick="deleteRow(' + row.id + ')">Delete</span>' +
@@ -206,16 +202,14 @@ function editRow(id) {
     for (var i = 0; i < cells.length - 1; i++) {
         var value = cells[i].innerText;
 
-        // Store the original content in a data attribute
         cells[i].setAttribute('data-original-content', value);
 
-        // Replace the content with an input field
         cells[i].innerHTML = '<input class="edit-input" type="text" value="' + value + '">';
     }
 
     isEdit = true
 
-    // Show the submit button and hide the edit and delete buttons
+   
     row.querySelector('.edit-button').style.display = 'none';
     row.querySelector('.delete-button').style.display = 'none';
     row.querySelector('.submit-button').style.display = 'inline-block';
@@ -224,14 +218,13 @@ function editRow(id) {
 // Delete a row
 function deleteRow(id) {
     var row = document.getElementById('row_' + id);
-
-    // Mock API request to localhost:8080/excel/{id} (replace with actual API endpoint)
+    
     fetch('http://localhost:8080/excel/' + id, {
         method: 'DELETE',
     })
         .then(response => {
             if (response.ok) {
-                row.remove(); // Remove the row from the table on successful delete
+                row.remove(); 
                 alert('Row deleted successfully!');
             } else {
                 alert('Error deleting row. Please try again.');
@@ -248,17 +241,17 @@ function submitRow(id) {
     var cells = row.getElementsByTagName('td');
 
     if (isEdit) {
-        // Handle Edit (PUT) functionality
+        
         isEdit = false
         var updatedData = {};
         for (var i = 0; i < cells.length - 1; i++) {
             var header = headers[i];
             var value = cells[i].getElementsByTagName('input')[0].value;
             updatedData[header] = value;
-            cells[i].innerText = value; // Replace input with text
+            cells[i].innerText = value; 
         }
 
-        // Mock API request to localhost:8080/excel/{id} for editing (replace with actual API endpoint)
+       
         fetch('http://localhost:8080/excel/' + id, {
             method: 'PUT',
             headers: {
@@ -276,13 +269,12 @@ function submitRow(id) {
             .catch(error => console.error('Error during row update:', error));
     } else {
         // Handle Delete functionality
-        // Mock API request to localhost:8080/excel/{id} for deletion (replace with actual API endpoint)
         fetch('http://localhost:8080/excel/' + id, {
             method: 'DELETE',
         })
             .then(response => {
                 if (response.ok) {
-                    row.remove(); // Remove the row from the table on successful delete
+                    row.remove(); 
                     alert('Row deleted successfully!');
                 } else {
                     alert('Error deleting row. Please try again.');
@@ -291,7 +283,7 @@ function submitRow(id) {
             .catch(error => console.error('Error during row delete:', error));
     }
 
-    // Hide the submit button and show the edit and delete buttons
+   
     row.querySelector('.edit-button').style.display = 'inline-block';
     row.querySelector('.delete-button').style.display = 'inline-block';
     row.querySelector('.submit-button').style.display = 'none';
@@ -319,11 +311,9 @@ function uploadFile() {
                 })
                     .then(response => response.json())
                     .then(data => {
-                        // Handle success response, if needed
                         console.log('File uploaded successfully:', data);
                     })
                     .catch(error => {
-                        // Handle error, if needed
                         console.error('Error uploading file:', error);
                     });
             }
