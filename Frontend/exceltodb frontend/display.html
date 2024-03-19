@@ -263,12 +263,11 @@ function submitRow(id) {
                 if (response.ok) {
                     alert('Row updated successfully!');
                 } else {
-                    alert('Error updating row. Please try again.');
+                    alert('Error updating row. please enter valid data');
                 }
             })
             .catch(error => console.error('Error during row update:', error));
     } else {
-        // Handle Delete functionality
         fetch('http://localhost:8080/excel/' + id, {
             method: 'DELETE',
         })
